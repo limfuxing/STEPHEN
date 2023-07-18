@@ -7,3 +7,10 @@ To install the package
 ```{r}
 devtools::install_github("limfuxing/STEPHEN")
 ```
+To run the example
+
+```{r}
+library(STEPHEN)
+library(mhsmm)
+example(STEPHEN)
+```
