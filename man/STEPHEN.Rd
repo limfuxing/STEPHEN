@@ -20,7 +20,7 @@ A Data Frame containing the date, step count, heart rate and predicted physical 
 This function takes Fitbit's Step Count and Heart Rate (HR) data to estimate physical activity levels (Sedentary, LowPA, ModeratePA and VigorousPA) using an ensemble of Hidden semi-Markov models. Users need to supply the Step Count and Heart Rate Data and has the option to also supply the pre-trained set of models that will be used to predict physical activity. We recommend that this set of models have been trained on individuals with similar lifestyles to that we will predict. If not supplied, the default set based on 11 individuals from OPTIMISE trial (Brakenridge et al., 2022, BMC Public Health) will be used.
 }
 
-\example{
+\examples{
 # load step count data
 data(steps.ex)
 # load heart rate data
