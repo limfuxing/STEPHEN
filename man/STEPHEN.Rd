@@ -25,5 +25,6 @@ This function takes Fitbit's Step Count and Heart Rate (HR) data to estimate phy
 data(steps.ex)
 # load heart rate data
 data(hr.ex)
-STEPHEN(steps.data=steps.ex,HR.data=hr.ex)
+res <- STEPHEN(steps.data=steps.ex,HR.data=hr.ex)
+head(res)
 }

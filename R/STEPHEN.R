@@ -76,7 +76,7 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
             bias.HR
         out$model$parms.emission$size1 <- ifelse(out$model$parms.emission$size1 < 
             0.2, 0.2, out$model$parms.emission$size1)
-        smoNB5.class <- predict(out, newdata = data, verbose = FALSE)
+        smoNB5.class <- predict(out, newdata = data, trace = FALSE)
         print(paste0("Finished predicting using ", match(set, 
             Trained.subjects), "out of ", length(Trained.subjects), 
             "preTrained models"))
@@ -90,5 +90,6 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
     class.HSMM1 <- apply(class.HSMM1, 1, getmode)
     PA_class <- c("SED", "LPA", "MPA", "VPA")
     output <- data.frame(steps = steps.use, HR = hr.use, predicted_PA = PA_class[class.HSMM1])
+    output
 }
 
