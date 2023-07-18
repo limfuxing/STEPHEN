@@ -25,8 +25,8 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
         data(optimise1162)
         data(optimise1167)
         preTrainedSet <- list(optimise1019,optimise1022,optimise1050,optimise1061,
-				optimise1083,optimise1088.optimise1104,optimise1112,
-				optimise1161,optimise11162,optimise1167)
+				optimise1083,optimise1088,optimise1104,optimise1112,
+				optimise1161,optimise1162,optimise1167)
         names(preTrainedSet) <- paste0('subject',1:length(preTrainedSet))
     }
 
