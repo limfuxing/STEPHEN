@@ -39,8 +39,7 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
     mins = lubridate::minute(time)
     secs = lubridate::second(time)
     time.24hr <- hour + mins/60 + secs/3600
-    date.cont <- (as.numeric(date) - min(as.numeric(date))) * 
-        24 + time.24hr
+    date.cont <- (as.numeric(date) - min(as.numeric(date))) *24 + time.24hr
     rownames(steps.data) <- paste0(date, "-", time.24hr)
     rownames(HR.data) <- paste0(date, "-", time.24hr)
     time = lubridate::mdy_hms(HR.data[, 1])
@@ -48,21 +47,22 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
     HR.data[hour >= 0 & hour < 6, 2] = 0
     non.usage = HR.data[, 2] == 0
     chpts = which(as.logical(abs(diff(non.usage)))) + 1
-    idx = data.frame(st = chpts[-length(chpts)], en = chpts[-1] - 
-        1)
+    idx = data.frame(st = chpts[-length(chpts)], en = chpts[-1] - 1)
     idx$len = idx$en - idx$st + 1
     getSubset <- function(idx, x) {
         x[idx[1]:idx[2]]
     }
     idx.use <- idx[seq(1, nrow(idx), 2), ]
     idx.use <- idx.use[idx.use$len >= 5, ]
-    steps.use <- unlist(apply(idx.use, 1, getSubset, x = steps.data[, 
-        2]))
-    hr.use <- unlist(apply(idx.use, 1, getSubset, x = HR.data[, 
-        2]))
+    steps.use <- unlist(apply(idx.use, 1, getSubset, x = steps.data[,2]))
+    hr.use <- unlist(apply(idx.use, 1, getSubset, x = HR.data[,2]))
     cum.idx <- NULL
-    for (i in 1:nrow(idx.use)) cum.idx <- c(cum.idx, idx.use[i, 
-        1]:idx.use[i, 2])
+    for (i in 1:nrow(idx.use)) 
+	cum.idx <- c(cum.idx, idx.use[i,1]:idx.use[i,2])
+
+    date.use <- date[cum.idx]
+    time.use <- time[cum.idx]
+
     data <- list(x = data.frame(steps.use, hr.use), N = idx.use$len)
     class(data) <- "hsmm.data"
     class.HSMM1 <- NULL
@@ -89,7 +89,7 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
     }
     class.HSMM1 <- apply(class.HSMM1, 1, getmode)
     PA_class <- c("SED", "LPA", "MPA", "VPA")
-    output <- data.frame(steps = steps.use, HR = hr.use, predicted_PA = PA_class[class.HSMM1])
+    output <- data.frame(date=date.use,time=time.use,steps = steps.use, HR = hr.use, predicted_PA = factor(PA_class[class.HSMM1], levels=PA_class))
     output
 }
 

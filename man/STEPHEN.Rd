@@ -27,4 +27,8 @@ data(steps.ex)
 data(hr.ex)
 res <- STEPHEN(steps.data=steps.ex,HR.data=hr.ex)
 head(res)
+# plot data
+plot.data(res)
+# plot proportion of PA
+plot.propPA(res)
 }
