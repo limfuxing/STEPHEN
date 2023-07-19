@@ -4,7 +4,7 @@
   
 #' @return  A ggplot object
 #' @export
-plot.data <- function(object) {
+plot_data <- function(object) {
   require(ggplot2)
   ggplot(object, aes(x=steps,y=HR,col=predicted_PA)) + geom_point(size=0.3) + xlab('Step Counts') + ylab('Heart Rate')
 }
@@ -16,7 +16,7 @@ plot.data <- function(object) {
   
 #' @return  A ggplot object
 #' @export
-plot.propPA <- function(object) {
+plot_propPA <- function(object) {
   out <- aggregate(object$predicted_PA,by=list(object$date),length)
   n   <- out$x
   names(n) <- out$Group.1
