@@ -76,6 +76,12 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
             bias.HR
         out$model$parms.emission$size1 <- ifelse(out$model$parms.emission$size1 < 
             0.2, 0.2, out$model$parms.emission$size1)
+
+        # ensure class 1-4 have increasing mean HR
+        HR.order <- order(out$model$parms.emission$mu2)
+        out$model$parms.emission$mu2 <- out$model$parms.emission$mu2[HR.order]
+        out$model$parms.emission$mu1 <- out$model$parms.emission$mu1[HR.order]
+
         smoNB5.class <- predict(out, newdata = data, trace = FALSE)
         print(paste0("Finished predicting using ", match(set, 
             Trained.subjects), "out of ", length(Trained.subjects), 
