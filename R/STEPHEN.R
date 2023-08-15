@@ -35,15 +35,22 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
         Trained.subjects <- 1:length(preTrainedSet)
     date <- as.Date(steps.data[, 1], format = "%m/%d/%Y")
     time = lubridate::mdy_hms(HR.data[, 1])
+    # check if assumed time format is correct
+    if(! as.numeric(diff(time[1:2],unit='secs'))==60) 
+      time = lubridate::mdy_hm(HR.data[, 1])
     hour = lubridate::hour(time)
     mins = lubridate::minute(time)
     secs = lubridate::second(time)
+
+    if(! min(hour) == 0 & max(hour)==23 ) 
+     print('Warnings: please check your timestamp date variable. It must in MDY HMS or MDY HM format')
+    if(! min(mins) == 0 & max(mins)==59 ) 
+     print('Warnings: please check your timestamp date variable. It must in MDY HMS or MDY HM format')
+
     time.24hr <- hour + mins/60 + secs/3600
     date.cont <- (as.numeric(date) - min(as.numeric(date))) *24 + time.24hr
     rownames(steps.data) <- paste0(date, "-", time.24hr)
     rownames(HR.data) <- paste0(date, "-", time.24hr)
-    time = lubridate::mdy_hms(HR.data[, 1])
-    hour = lubridate::hour(time)
     HR.data[hour >= 0 & hour < 6, 2] = 0
     non.usage = HR.data[, 2] == 0
     chpts = which(as.logical(abs(diff(non.usage)))) + 1
@@ -84,8 +91,8 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
 
         smoNB5.class <- predict(out, newdata = data, trace = FALSE)
         print(paste0("Finished predicting using ", match(set, 
-            Trained.subjects), "out of ", length(Trained.subjects), 
-            "preTrained models"))
+            Trained.subjects), " out of ", length(Trained.subjects), 
+            " preTrained models"))
         shmm.int <- smoNB5.class$s
         class.HSMM1 <- cbind(class.HSMM1, shmm.int)
     }
