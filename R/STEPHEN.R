@@ -55,11 +55,24 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
     non.usage = HR.data[, 2] == 0
     chpts = which(as.logical(abs(diff(non.usage)))) + 1
     idx = data.frame(st = chpts[-length(chpts)], en = chpts[-1] - 1)
+    # if first segment does not start at 1
+    if(idx$st[1]>1) 
+      idx <- rbind(data.frame(st=1,en=idx$st[1]-1),idx)
+    # if last segment does not end on the last row of data
+    if(idx$en[nrow(idx)]<nrow(HR.data)) 
+      idx <- rbind(idx,data.frame(st=idx$en[nrow(idx)]+1,en=nrow(HR.data)))
+
     idx$len = idx$en - idx$st + 1
     getSubset <- function(idx, x) {
         x[idx[1]:idx[2]]
     }
-    idx.use <- idx[seq(1, nrow(idx), 2), ]
+    # when the first segment is usage
+    if(HR.data[idx$st[1],2]!=0) 
+      idx.use <- idx[seq(1, nrow(idx), 2), ]
+    # when the first segment is non-usage
+    if(HR.data[idx$st[1],2]==0) 
+      idx.use <- idx[seq(2, nrow(idx), 2), ]
+
     idx.use <- idx.use[idx.use$len >= 5, ]
     steps.use <- unlist(apply(idx.use, 1, getSubset, x = steps.data[,2]))
     hr.use <- unlist(apply(idx.use, 1, getSubset, x = HR.data[,2]))
