@@ -36,15 +36,15 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
     date <- as.Date(steps.data[, 1], format = "%m/%d/%Y")
     time = lubridate::mdy_hms(HR.data[, 1])
     # check if assumed time format is correct
-    if(! as.numeric(diff(time[1:2],unit='secs'))==60) 
+    if(! as.numeric(diff(time[1:2]),unit='secs') == 60 )
       time = lubridate::mdy_hm(HR.data[, 1])
     hour = lubridate::hour(time)
     mins = lubridate::minute(time)
     secs = lubridate::second(time)
 
-    if(! min(hour) == 0 & max(hour)==23 ) 
+    if(! min(hour,na.rm=T) == 0 & max(hour,na.rm=T)==23 ) 
      print('Warnings: please check your timestamp date variable. It must in MDY HMS or MDY HM format')
-    if(! min(mins) == 0 & max(mins)==59 ) 
+    if(! min(mins, na.rm=T) == 0 & max(mins, na.rm=T)==59 ) 
      print('Warnings: please check your timestamp date variable. It must in MDY HMS or MDY HM format')
 
     time.24hr <- hour + mins/60 + secs/3600
