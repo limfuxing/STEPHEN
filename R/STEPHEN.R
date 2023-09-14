@@ -36,8 +36,10 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
     date <- as.Date(steps.data[, 1], format = "%m/%d/%Y")
     time = lubridate::mdy_hms(HR.data[, 1])
     # check if assumed time format is correct
-    if(! as.numeric(diff(time[1:2]),unit='secs') == 60 )
-      time = lubridate::mdy_hm(HR.data[, 1])
+    if( any(as.numeric(diff(time[1:2]),unit='secs')!=60 )
+     stop('There are time gaps in your data. Data needs to have regular 1-minute interval. Please check your data.')
+
+    time = lubridate::mdy_hm(HR.data[, 1])
     hour = lubridate::hour(time)
     mins = lubridate::minute(time)
     secs = lubridate::second(time)
@@ -102,7 +104,7 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
         out$model$parms.emission$mu2 <- out$model$parms.emission$mu2[HR.order]
         out$model$parms.emission$mu1 <- out$model$parms.emission$mu1[HR.order]
 
-        smoNB5.class <- predict(out, newdata = data, trace = FALSE)
+        invisible(capture.output(smoNB5.class <- predict(out, newdata = data, trace = FALSE)))
         print(paste0("Finished predicting using ", match(set, 
             Trained.subjects), " out of ", length(Trained.subjects), 
             " preTrained models"))
