@@ -36,9 +36,10 @@ STEPHEN <- function (steps.data, HR.data, preTrainedSet = NULL) {
     date <- as.Date(steps.data[, 1], format = "%m/%d/%Y")
     time = lubridate::mdy_hms(HR.data[, 1])
     # check if assumed time format is correct
-    if( any(as.numeric(diff(time[1:2]),unit='secs')!=60 )
-     stop('There are time gaps in your data. Data needs to have regular 1-minute interval. Please check your data.')
-
+    if( any(as.numeric(diff(time[1:2]),unit='secs')!=60 )) {
+     idx <- which(any(as.numeric(diff(time[1:2]),unit='secs')!=60))
+     stop(paste0('There are ',length(idx),' time gaps in your data. The first gap is between row ',idx[1], ' and ', idx[1]+1, '. Data needs to have regular 1-minute interval'))
+    }
     time = lubridate::mdy_hm(HR.data[, 1])
     hour = lubridate::hour(time)
     mins = lubridate::minute(time)
